@@ -15,6 +15,9 @@
 
 import os
 import sys
+from typing import Any
+
+import sphinx.application
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -22,6 +25,7 @@ import sys
 #
 # The short X.Y version.
 import zarr
+import sphinx
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -42,15 +46,21 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
+    'autoapi.extension',
     "numpydoc",
     "sphinx_issues",
     "sphinx_copybutton",
     "sphinx_design",
 ]
 
-numpydoc_show_class_members = False
-numpydoc_class_members_toctree = False
 issues_github_path = "zarr-developers/zarr-python"
+
+autoapi_dirs = ['../src/zarr']
+autoapi_add_toctree_entry = False
+autoapi_generate_api_docs = False
+autoapi_member_order = "groupwise"
+autoapi_root = "api"
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -68,7 +78,7 @@ main_doc = "index"
 
 # General information about the project.
 project = "zarr"
-copyright = "2022, Zarr Developers"
+copyright = "2023, Zarr Developers"
 author = "Zarr Developers"
 
 version = zarr.__version__
@@ -144,6 +154,7 @@ html_theme_options = {
         },
     ],
     "collapse_navigation": True,
+    "navigation_with_keys": False,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -161,8 +172,7 @@ html_theme_options = {
 html_logo = "_static/logo1.png"
 
 
-# Add custom css
-def setup(app):
+def setup(app: sphinx.application.Sphinx) -> None:
     app.add_css_file("custom.css")
 
 
@@ -331,6 +341,7 @@ texinfo_documents = [
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
+    "numcodecs": ("https://numcodecs.readthedocs.io/en/stable/", None),
 }
 
 
